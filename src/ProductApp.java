@@ -15,6 +15,8 @@ public class ProductApp extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        createMenuBar();
+
         JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10));
 
         JLabel customerNameLabel = new JLabel("Customer Name:");
@@ -79,9 +81,11 @@ public class ProductApp extends JFrame {
             return;
         }
 
-        double vatAmount = productPrice * 0.15;
-        double commissionAmount = productPrice * 0.05;
-        double totalSaleAmount = productPrice + vatAmount + commissionAmount;
+        ProductCalculations calculations = new ProductCalculations(productPrice);
+
+        double vatAmount = calculations.GetVat();
+        double commissionAmount = calculations.GetCommission();
+        double totalSaleAmount = calculations.GetTotal();
 
         String message = String.format(
                 "Customer Name: %s\n" +
@@ -138,17 +142,35 @@ public class ProductApp extends JFrame {
         }
     }
 
-    private double getProductPrice(String productName) {
-        switch (productName) {
-            case "Cozy Nights Monarch":
-                return 12000.00;
-            case "Restonic Barbados":
-                return 9500.00;
-            case "Sealy Phuket":
-                return 14500.00;
-            default:
-                return 0.00;
-        }
+    private void createMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+
+        JMenu fileMenu = new JMenu("File");
+        JMenuItem exitMenuItem = new JMenuItem("Exit");
+
+        JMenu toolsMenu = new JMenu("Tools");
+        JMenuItem processMenuItem = new JMenuItem("Process");
+        JMenuItem clearMenuItem = new JMenuItem("Clear");
+
+        exitMenuItem.addActionListener(e -> System.exit(0));
+        processMenuItem.addActionListener(e -> processSale());
+        clearMenuItem.addActionListener(e -> clearForm());
+
+        fileMenu.add(exitMenuItem);
+
+        toolsMenu.add(processMenuItem);
+        toolsMenu.add(clearMenuItem);
+
+        menuBar.add(fileMenu);
+        menuBar.add(toolsMenu);
+
+        setJMenuBar(menuBar);
+    }
+
+    private void clearForm() {
+        customerNameField.setText("");
+        productPriceField.setText("");
+        productComboBox.setSelectedIndex(0);
     }
 
     public static void main(String[] args) {

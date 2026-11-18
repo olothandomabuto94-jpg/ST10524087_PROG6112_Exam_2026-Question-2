@@ -1,0 +1,7 @@
+DATA LOG
+*********************
+Customer Name: John
+Product: Cozy Nights Monarch
+VAT: R150.00
+COMMISSION: R50.00
+TOTAL: R1200.00
